@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.model;
+package de.brunokrams.lichessclient.model.recording;
 
 import org.springframework.stereotype.Service;
 

@@ -1,31 +1,17 @@
 package de.brunokrams.lichessclient.controller;
 
-import com.sun.tools.javac.Main;
-import de.brunokrams.lichessclient.AppConfig;
-import de.brunokrams.lichessclient.model.AudioRecorder;
-import de.brunokrams.lichessclient.model.Device;
-import de.brunokrams.lichessclient.model.DevicesManager;
-import de.brunokrams.lichessclient.model.Recording;
+import de.brunokrams.lichessclient.model.recording.AudioRecorder;
+import de.brunokrams.lichessclient.model.recording.Device;
+import de.brunokrams.lichessclient.model.recording.DevicesManager;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.security.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
