@@ -13,17 +13,15 @@ public class DevicesManager {
     private Device active;
 
     public List<Device> getDevices() {
-        List<Device> result =  new ArrayList<>();
+        List<Device> result = new ArrayList<>();
         Mixer.Info[] mixers = AudioSystem.getMixerInfo();
         for (Mixer.Info mixerInfo : mixers) {
             Mixer mixer = AudioSystem.getMixer(mixerInfo);
             Line.Info[] targetLineInfos = mixer.getTargetLineInfo();
             for (Line.Info lineInfo : targetLineInfos) {
-                if (lineInfo instanceof DataLine.Info dataLineInfo) {
-                    if (TargetDataLine.class.isAssignableFrom(dataLineInfo.getLineClass())) {
-                        result.add(new Device(mixer));
-                        break;
-                    }
+                if (lineInfo instanceof DataLine.Info dataLineInfo && TargetDataLine.class.isAssignableFrom(dataLineInfo.getLineClass())) {
+                    result.add(new Device(mixer));
+                    break;
                 }
             }
         }

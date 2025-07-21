@@ -6,6 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
 
 @Configuration
 @ComponentScan
@@ -21,5 +23,10 @@ public class AppConfig {
                 false       // little endian
         );
     }
+    @Bean
+    public DataLine.Info dataLineInfo() {
+        return new DataLine.Info(TargetDataLine.class, audioFormat());
+    }
+
 
 }

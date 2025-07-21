@@ -63,21 +63,8 @@ public class MainController {
         initOngoingGamesListView();
     }
 
-    @Autowired
-    AudioFormat audioFormat;
-
     private void initAudioRecorder() {
-        audioRecorder.setRecordingReadyListener(recording -> {
-            logger.info("Recording finished");
-            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            File outFile = new File("recording_" + timestamp + ".wav");
-            try (ByteArrayInputStream bais = new ByteArrayInputStream(recording.getData());
-                 AudioInputStream audioInputStream = new AudioInputStream(bais, audioFormat, recording.getData().length / audioFormat.getFrameSize())) {
-                AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        audioRecorder.setRecordingReadyListener(recording -> logger.info("Recording finished"));
         audioRecorder.setRecordingStartedListener(() -> logger.info("Voice detected. Started recording."));
     }
 
@@ -101,7 +88,7 @@ public class MainController {
     }
 
     private void initOngoingGamesListView() {
-
+        // TODO implement
     }
 
     private void initDevicesListView() {

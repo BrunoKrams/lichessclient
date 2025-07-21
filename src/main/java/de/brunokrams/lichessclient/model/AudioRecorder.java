@@ -14,6 +14,8 @@ public class AudioRecorder {
     private static final int BUFFER_SIZE = 4096;
 
     private final AudioFormat audioFormat;
+    private final DataLine.Info dataLineInfo;
+
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     private RecordingReadyListener recordingReadyListener = recording -> {};
@@ -24,8 +26,9 @@ public class AudioRecorder {
     private boolean recording;
     private long lastSoundTime;
 
-    public AudioRecorder(AudioFormat audioFormat) {
+    public AudioRecorder(AudioFormat audioFormat, DataLine.Info dataLineInfo) {
         this.audioFormat = audioFormat;
+        this.dataLineInfo = dataLineInfo;
     }
 
     public interface RecordingReadyListener {
@@ -41,9 +44,9 @@ public class AudioRecorder {
         running.set(true);
 
         Thread monitorThread = new Thread(() -> {
+
             try {
-                DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
-                targetDataLine = device.getTargetDataLine(info);
+                targetDataLine = device.getTargetDataLine(dataLineInfo);
                 targetDataLine.open(audioFormat);
                 targetDataLine.start();
 
@@ -77,7 +80,7 @@ public class AudioRecorder {
                     targetDataLine.close();
                 }
             }
-        }, "AudioMonitorThread");
+        }, "AudioRecorderThread");
 
         monitorThread.setDaemon(true);
         monitorThread.start();
@@ -107,11 +110,10 @@ public class AudioRecorder {
         long sum = 0;
         int sampleCount = 0;
 
-        // Process bytes two at a time (16-bit samples), big endian
         for (int i = 0; i < length - 1; i += 2) {
-            int high = buffer[i];       // signed byte, high byte first
-            int low = buffer[i + 1] & 0xFF;  // unsigned byte, low byte second
-            int sample = (high << 8) | low;
+            int high = buffer[i];
+            int low = buffer[i + 1] & 0xFF;
+            long sample = (high << 8) | low;
 
             sum += sample * sample;
             sampleCount++;
@@ -120,7 +122,7 @@ public class AudioRecorder {
         if (sampleCount == 0) return 0;
 
         double rms = Math.sqrt(sum / (double) sampleCount);
-        return rms / 32768.0;  // Normalize RMS to [0,1]
+        return rms / 32768.0;
     }
 
     public void setRecordingReadyListener(RecordingReadyListener listener) {
