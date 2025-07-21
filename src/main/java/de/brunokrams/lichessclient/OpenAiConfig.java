@@ -1,17 +1,10 @@
 package de.brunokrams.lichessclient;
 
 
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
-import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
-import org.springframework.ai.openai.api.OpenAiAudioApi;
-import org.springframework.ai.openai.api.ResponseFormat;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
