@@ -60,7 +60,7 @@ public class MainController {
         audioRecorder.setRecordingReadyListener(recording -> {
             setStatusLabelText("Recording finished. Translating to SAN.");
             String sanMove = speechToSan.speechToSan(recording);
-            setStatusLabelText("Move " + sanMove);
+            setStatusLabelText(sanMove);
         });
     }
 
