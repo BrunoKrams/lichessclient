@@ -4,19 +4,21 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.io.support.ResourcePropertySource;
 
 import java.io.IOException;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 public class App extends Application {
 
-    private ApplicationContext springContext;
+    private AnnotationConfigApplicationContext springContext;
 
     @Override
-    public void init() {
-        springContext = new AnnotationConfigApplicationContext(AppConfig.class);
+    public void init() throws IOException {
+        springContext = new AnnotationConfigApplicationContext();
+        springContext.getEnvironment().getPropertySources().addLast(new ResourcePropertySource("classpath:application.properties"));
+        springContext.register(AppConfig.class);
+        springContext.refresh();
     }
 
     @Override
@@ -32,7 +34,7 @@ public class App extends Application {
 
     @Override
     public void stop() {
-        ((AnnotationConfigApplicationContext) springContext).close();
+        springContext.close();
     }
 
     public static void main(String[] args) {

@@ -3,12 +3,17 @@ package de.brunokrams.lichessclient.controller;
 import de.brunokrams.lichessclient.model.recording.AudioRecorder;
 import de.brunokrams.lichessclient.model.recording.Device;
 import de.brunokrams.lichessclient.model.recording.DevicesManager;
+import de.brunokrams.lichessclient.model.speechtosan.SpeechToSan;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,17 +31,19 @@ public class MainController {
     @FXML
     private ToggleButton recordingButton;
     @FXML
-    private Label recordingLabel;
+    private Label statusLabel;
 
     private final DevicesManager devicesManager;
     private final AudioRecorder audioRecorder;
+    private final SpeechToSan speechToSan;
 
     private final BooleanProperty isRecording = new SimpleBooleanProperty(false);
 
     @Autowired
-    public MainController(DevicesManager devicesManager, AudioRecorder audioRecorder) {
+    public MainController(DevicesManager devicesManager, AudioRecorder audioRecorder, SpeechToSan speechToSan) {
         this.devicesManager = devicesManager;
         this.audioRecorder = audioRecorder;
+        this.speechToSan = speechToSan;
     }
 
     @FXML
@@ -44,14 +51,21 @@ public class MainController {
         initAudioRecorder();
         initDevicesManager();
         initRecordingButton();
-        initRecordingLabel();
         initDevicesListView();
         initOngoingGamesListView();
     }
 
     private void initAudioRecorder() {
-        audioRecorder.setRecordingReadyListener(recording -> logger.info("Recording finished"));
-        audioRecorder.setRecordingStartedListener(() -> logger.info("Voice detected. Started recording."));
+        audioRecorder.setRecordingStartedListener(() -> setStatusLabelText("Voice detected. Started recording."));
+        audioRecorder.setRecordingReadyListener(recording -> {
+            setStatusLabelText("Recording finished. Translating to SAN.");
+            String sanMove = speechToSan.speechToSan(recording);
+            setStatusLabelText("Move " + sanMove);
+        });
+    }
+
+    private void setStatusLabelText(String text) {
+        Platform.runLater(() -> statusLabel.setText(text));
     }
 
     private void initDevicesManager() {
@@ -67,10 +81,6 @@ public class MainController {
                 audioRecorder.stop();
             }
         });
-    }
-
-    private void initRecordingLabel() {
-        recordingLabel.visibleProperty().bind(isRecording);
     }
 
     private void initOngoingGamesListView() {

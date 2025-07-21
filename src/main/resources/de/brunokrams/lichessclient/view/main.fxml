@@ -2,9 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="de.brunokrams.lichessclient.controller.MainController"
       spacing="20" alignment="CENTER"
@@ -38,8 +35,7 @@
                 <Tooltip text="Record"/>
             </tooltip>
         </ToggleButton>
-        <Label fx:id="recordingLabel"
-               text="Recording..."/>
+        <Label fx:id="statusLabel"/>
     </children>
 
 </VBox>

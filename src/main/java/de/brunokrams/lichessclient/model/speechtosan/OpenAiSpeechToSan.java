@@ -2,12 +2,9 @@ package de.brunokrams.lichessclient.model.speechtosan;
 
 import de.brunokrams.lichessclient.model.recording.Recording;
 import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.OpenAiChatModel;

@@ -36,6 +36,7 @@ public class OpenAiConfig {
                  "Springer schlägt e7" should translate to "Nxe7".
                  "Der e-Läufer geht nach c6" should translate to "Bec6".
                  "Bauer auf a8 mit Umwandlung zur Dame" should translate to "a8+Q".
+                 Please use only the characters "K" for König, "Q" for Dame, "R" for Turm, "B" for Läufer and "N" for Springer.
                 """;
         return SystemMessage.builder().text(text).build();
     }

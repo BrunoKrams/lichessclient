@@ -3,7 +3,9 @@ package de.brunokrams.lichessclient.model.recording;
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.*;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
@@ -18,8 +20,10 @@ public class AudioRecorder {
 
     private final AtomicBoolean running = new AtomicBoolean(false);
 
-    private RecordingReadyListener recordingReadyListener = recording -> {};
-    private RecordingStartedListener recordingStartedListener = () -> {};
+    private RecordingReadyListener recordingReadyListener = recording -> {
+    };
+    private RecordingStartedListener recordingStartedListener = () -> {
+    };
 
     private TargetDataLine targetDataLine;
     private ByteArrayOutputStream byteArrayOutputStream;
@@ -102,8 +106,15 @@ public class AudioRecorder {
 
     private void stopRecording() {
         recording = false;
-        byte[] audioData = byteArrayOutputStream.toByteArray();
-        recordingReadyListener.onRecordingReady(new Recording(audioData));
+        try {
+            byte[] rawAudioData = byteArrayOutputStream.toByteArray();
+            AudioInputStream audioInputStream = new AudioInputStream(new ByteArrayInputStream(rawAudioData), audioFormat, rawAudioData.length / audioFormat.getFrameSize());
+            ByteArrayOutputStream result = new ByteArrayOutputStream();
+            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, result);
+            recordingReadyListener.onRecordingReady(new Recording(result.toByteArray()));
+        } catch (IOException e) {
+            logger.warning("Unable to transform sound. Root cause " + e.getMessage());
+        }
     }
 
     private double calculateSoundLevel(byte[] buffer, int length) {
