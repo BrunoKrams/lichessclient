@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.brunokrams.lichessclient.controller.MainController"
+      spacing="20" alignment="CENTER"
+      stylesheets="@styles.css"
+      styleClass="root">
+
+    <children>
+        <HBox prefHeight="100.0" prefWidth="400.0" spacing="10.0"
+              VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+            <children>
+                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="Devices"/>
+                        <ListView fx:id="devicesListView" VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Label text="Games"/>
+                        <ListView fx:id="gamesListView" VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <ToggleButton fx:id="recordingButton"
+                      prefWidth="50"
+                      prefHeight="50"
+                      styleClass="recording-button"
+                      text="REC">
+            <tooltip>
+                <Tooltip text="Record"/>
+            </tooltip>
+        </ToggleButton>
+        <Label fx:id="recordingLabel"
+               text="Recording..."/>
+    </children>
+
+</VBox>
