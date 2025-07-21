@@ -38,7 +38,6 @@ public class AudioRecorder {
 
     public void start(double threshold, int silenceMillisBeforeStop, Device device) {
         if (running.get()) return;
-        System.out.println("Device: " + device.getName());
         running.set(true);
 
         Thread monitorThread = new Thread(() -> {
@@ -46,7 +45,6 @@ public class AudioRecorder {
                 DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
                 targetDataLine = device.getTargetDataLine(info);
                 targetDataLine.open(audioFormat);
-                System.out.println(targetDataLine.getFormat());
                 targetDataLine.start();
 
                 byte[] buffer = new byte[BUFFER_SIZE];
@@ -57,7 +55,6 @@ public class AudioRecorder {
                     int bytesRead = targetDataLine.read(buffer, 0, buffer.length);
                     if (bytesRead > 0) {
                         double level = calculateSoundLevel(buffer, bytesRead);
-                        System.out.println(level);
                         if (level > threshold) {
                             if (!recording) {
                                 startRecording();

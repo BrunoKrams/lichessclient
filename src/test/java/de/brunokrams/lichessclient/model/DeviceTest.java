@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class DeviceTest {
+class DeviceTest {
 
     @Test
     void constructor_throwsException_whenMixerIsNull() {
