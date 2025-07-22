@@ -1,5 +1,6 @@
 package de.brunokrams.lichessclient.model.chess;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static de.brunokrams.lichessclient.model.chess.Piece.*;
@@ -20,6 +21,24 @@ class PieceMove implements Move {
         this.targetField = targetField;
         if (originFile != null && originField != null) {
             throw new IllegalArgumentException("Both origin file and field are set.");
+        }
+        if (piece == KNIGHT || piece == BISHOP || piece == ROOK) {
+            List<Field> reachableFields;
+            if (originFile != null) {
+                reachableFields = new ArrayList<>();
+                for (Field field : originFile.getFields()) {
+                    reachableFields.addAll(piece.getReachableFields(field));
+                }
+                if (!reachableFields.contains(targetField)) {
+                    throw new IllegalArgumentException("Target field is not reachable from field.");
+                }
+            }
+            if (originField != null) {
+                reachableFields = piece.getReachableFields(originField);
+                if (!reachableFields.contains(targetField)) {
+                    throw new IllegalArgumentException("Target field is not reachable from file.");
+                }
+            }
         }
         if (piece == KING) {
             if (originFile != null) {
