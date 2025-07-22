@@ -19,6 +19,11 @@ class PieceMoveTest {
         fail();
     }
 
+    @Test
+    void constructor_throwsException_whenUnneccessaryFieldIsProvided() {
+        fail();
+    }
+
     @ParameterizedTest
     @CsvSource(
             nullValues = "null",
