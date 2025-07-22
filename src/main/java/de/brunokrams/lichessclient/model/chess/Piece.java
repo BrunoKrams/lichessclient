@@ -9,7 +9,47 @@ public enum Piece {
     KNIGHT("N") {
         @Override
         public List<Field> getReachableFields(Field field) {
-            throw new RuntimeException("Not yet implemented.");
+            List<Field> result = new ArrayList<>();
+            List<Offsets> allOffsets = List.of(
+                    new Offsets(-2, -1),
+                    new Offsets(-2, +1),
+                    new Offsets(-1, -2),
+                    new Offsets(-1, +2),
+                    new Offsets(+1, -2),
+                    new Offsets(+1, +2),
+                    new Offsets(+2, -1),
+                    new Offsets(+2, +1)
+            );
+            char originFileChar = field.getFile().getSanChar();
+            int originRankIndex = field.getRank().getIndex();
+            for (Offsets offsets : allOffsets) {
+                try {
+                    char fileChar = (char) (originFileChar + offsets.fileOffset);
+                    int rankIndex = originRankIndex + offsets.rankOffset;
+                    result.add(Field.fromFileAndRank(File.fromChar(fileChar), Rank.fromIndex(rankIndex)));
+                } catch (Exception e) {
+                    // Nothing to do here. Just a move which is outside of the chess board.
+                }
+            }
+            return result;
+        }
+
+        private class Offsets {
+            private final int fileOffset;
+            private final int rankOffset;
+
+            private Offsets(int fileOffset, int rankOffset) {
+                this.fileOffset = fileOffset;
+                this.rankOffset = rankOffset;
+            }
+
+            public int getFileOffset() {
+                return fileOffset;
+            }
+
+            public int getRankOffset() {
+                return rankOffset;
+            }
         }
     }, BISHOP("B") {
         @Override
