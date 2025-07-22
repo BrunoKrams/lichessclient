@@ -1,6 +1,6 @@
-package de.brunokrams.lichessclient.model.speechtosan;
+package de.brunokrams.lichessclient.domain.speechtosan;
 
-import de.brunokrams.lichessclient.model.recording.Recording;
+import de.brunokrams.lichessclient.domain.recording.Recording;
 import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;

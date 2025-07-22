@@ -1,7 +1,7 @@
-package de.brunokrams.lichessclient.model.speechtosan;
+package de.brunokrams.lichessclient.domain.speechtosan;
 
 import de.brunokrams.lichessclient.AppConfig;
-import de.brunokrams.lichessclient.model.recording.Recording;
+import de.brunokrams.lichessclient.domain.recording.Recording;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

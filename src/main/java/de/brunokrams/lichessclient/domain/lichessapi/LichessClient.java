@@ -1,14 +1,41 @@
-package de.brunokrams.lichessclient.model.lichessapi;
+package de.brunokrams.lichessclient.domain.lichessapi;
 
+import de.brunokrams.lichessclient.domain.Game;
+import de.brunokrams.lichessclient.domain.User;
+import org.apache.hc.core5.net.URIBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.util.List;
 
 @Component
 public class LichessClient {
 
-//        private static final String LICHESS_URL = "https://lichess.org";
-//        private static final String ONGOING_GAMES_ENDPOINT_TEMPLATE = "/api/user/%s/current-game";
-//        private static final String MAKE_MOVE_ENDPOINT_TEMPLATE = "/api/board/game/%s/move/%s";
-//
+    private static final String LICHESS_BASE_URL = "https://lichess.org";
+    private static final String ONGOING_GAMES_ENDPOINT_TEMPLATE = "/api/user/%s/current-game";
+    private static final String MAKE_MOVE_ENDPOINT_TEMPLATE = "/api/board/game/%s/move/%s";
+
+    private final HttpClient httpClient;
+
+    @Autowired
+    public LichessClient(@Qualifier("lichessHttpClient") HttpClient httpClient) {
+        this.httpClient = httpClient;
+    }
+
+    public List<Game> getOngoingGamesByUser(User user) {
+
+    }
+
+    public void makeMove(String san, Game game) {
+
+    }
+
+
 //        private final ObjectMapper objectMapper;
 //
 //        private final HttpClient httpClient;

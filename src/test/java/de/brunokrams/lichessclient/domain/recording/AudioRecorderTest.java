@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.model.recording;
+package de.brunokrams.lichessclient.domain.recording;
 
 import de.brunokrams.lichessclient.AudioConfig;
 import org.junit.jupiter.api.Test;

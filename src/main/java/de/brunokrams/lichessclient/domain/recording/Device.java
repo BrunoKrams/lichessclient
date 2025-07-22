@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.model.recording;
+package de.brunokrams.lichessclient.domain.recording;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
