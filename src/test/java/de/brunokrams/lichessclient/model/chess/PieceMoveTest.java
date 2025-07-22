@@ -1,23 +1,27 @@
 package de.brunokrams.lichessclient.model.chess;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Fail.fail;
 
 class PieceMoveTest {
 
-    @Test
-        // BISHOP       @CsvSource({"A1,H7", "D6,E4", "E1, F3"})
-        //              @CsvSource({"A, H5", "B,G5", "G,A5"})
-        // KNIGHT       @CsvSource({"A1,E4","D6,A1", "E2, F5"})
-        //              @CsvSource({"A,E4","D,A1"})
-        // ROOK         @CsvSource({"A1,E4","D6,A1", "E2, F5"})
-    void constructor_throwsException_whenFieldIsUnreachable() {
-        fail();
+    @ParameterizedTest
+    @CsvSource(
+            nullValues = "null",
+            value = {
+                    "BISHOP,null,A1,TAKE,H7",
+                    "BISHOP,A,null,MOVE,H5",
+                    "KNIGHT,null,A1,MOVE,E4",
+                    "KNIGHT,A,null,TAKE,E4",
+                    "ROOK,null,A1,MOVE,E4"
+            }
+    )
+    void constructor_throwsException_whenFieldIsUnreachable(Piece piece, File originFile, Field originField, MoveType moveType, Field targetField) {
+        // when /then
+        assertThatThrownBy(() -> new PieceMove(piece, originFile, originField, moveType, targetField)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
