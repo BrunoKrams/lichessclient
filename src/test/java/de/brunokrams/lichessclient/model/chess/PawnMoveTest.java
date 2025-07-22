@@ -1,5 +1,6 @@
 package de.brunokrams.lichessclient.model.chess;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -20,6 +21,7 @@ class PawnMoveTest {
                     "null,MOVE,C4,null,true",// enPassant is true but targetField is no en passant field
                     "null,TAKE,A5,null,false",// MoveType is Take but File is not provided
                     "E,MOVE,E5,null,false",// MoveType is Move but File is provided
+                    "null,MOVE,A8,KING,false"// Promotion to king is dissallowed
             }
     )
     void constructor_throwsException_whenParametersAreInconsistent(File file, MoveType moveType, Field targetField, Piece promotionPiece, boolean enPassant) {

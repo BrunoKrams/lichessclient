@@ -1,5 +1,9 @@
 package de.brunokrams.lichessclient.model.chess;
 
+import java.util.List;
+
+import static de.brunokrams.lichessclient.model.chess.Piece.*;
+
 class PieceMove implements Move {
 
     private final Piece piece;
@@ -14,6 +18,25 @@ class PieceMove implements Move {
         this.originField = originField;
         this.moveType = moveType;
         this.targetField = targetField;
+        if (originFile != null && originField != null) {
+            throw new IllegalArgumentException("Both origin file and field are set.");
+        }
+        if (piece == KING) {
+            if (originFile != null) {
+                throw new IllegalArgumentException("File provided though piece is unique.");
+            }
+            if (originField != null) {
+                throw new IllegalArgumentException("Field provided though piece is unique.");
+            }
+        }
+        if (piece == QUEEN) {
+            if (originFile != null) {
+                throw new IllegalArgumentException("File provided though piece is unique.");
+            }
+            if (originField != null) {
+                throw new IllegalArgumentException("Field provided though piece is unique.");
+            }
+        }
     }
 
     @Override

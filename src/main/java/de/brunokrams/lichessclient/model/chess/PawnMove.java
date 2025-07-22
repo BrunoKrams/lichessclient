@@ -3,6 +3,10 @@ package de.brunokrams.lichessclient.model.chess;
 import java.util.List;
 
 import static de.brunokrams.lichessclient.model.chess.File.*;
+import static de.brunokrams.lichessclient.model.chess.MoveType.MOVE;
+import static de.brunokrams.lichessclient.model.chess.MoveType.TAKE;
+import static de.brunokrams.lichessclient.model.chess.Piece.KING;
+import static de.brunokrams.lichessclient.model.chess.Rank.EIGHT;
 
 public class PawnMove implements Move {
 
@@ -18,7 +22,7 @@ public class PawnMove implements Move {
         this.targetField = targetField;
         this.promotionPiece = promotionPiece;
         this.enPassant = enPassant;
-        if (moveType == MoveType.MOVE) {
+        if (moveType == MOVE) {
             if (file != null) {
                 throw new IllegalArgumentException("File is set for non capturing move.");
             }
@@ -26,7 +30,7 @@ public class PawnMove implements Move {
                 throw new IllegalArgumentException("En passant is set for non capturing move.");
             }
         }
-        if (moveType == MoveType.TAKE) {
+        if (moveType == TAKE) {
             if (file == null) {
                 throw new IllegalArgumentException("File is not set for capturing move.");
             }
@@ -34,11 +38,14 @@ public class PawnMove implements Move {
                 throw new IllegalArgumentException("Target field is unreachable.");
             }
         }
-        if (targetField.getRank() == Rank.EIGHT && promotionPiece == null) {
+        if (targetField.getRank() == EIGHT && promotionPiece == null) {
             throw new IllegalArgumentException("Pawn on eighth rank but no promotion piece provided.");
         }
-        if (promotionPiece != null && targetField.getRank() != Rank.EIGHT) {
+        if (promotionPiece != null && targetField.getRank() != EIGHT) {
             throw new IllegalArgumentException("Promotion piece provided though pawn is not on eighth rank.");
+        }
+        if (promotionPiece == KING) {
+            throw new IllegalArgumentException("Promotion to king is not possible.");
         }
     }
 
