@@ -1,11 +1,23 @@
 package de.brunokrams.lichessclient.model.chess;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 
 class PieceMoveTest {
+
+    @Test
+    void constructor_throwsException_whenFieldIsUnreachable() {
+        fail();
+    }
+
+    @Test
+    void constructor_throwsException_whenUnneccessaryFileIsProvided() {
+        fail();
+    }
 
     @ParameterizedTest
     @CsvSource(
