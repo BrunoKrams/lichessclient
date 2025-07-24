@@ -1,96 +1,42 @@
 package de.brunokrams.lichessclient.domain.lichessapi;
 
-import de.brunokrams.lichessclient.domain.User;
+import de.brunokrams.lichessclient.domain.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 @Component
 public class LichessClient {
 
     private static final String LICHESS_BASE_URL = "https://lichess.org";
-    private static final String ONGOING_GAMES_ENDPOINT_TEMPLATE = "/api/user/%s/current-game";
-    private static final String MAKE_MOVE_ENDPOINT_TEMPLATE = "/api/board/game/%s/move/%s";
+    private static final String EXPORT_ONE_GAME_ENDPOINT_TEMPLATE = "/game/export/%s";
 
-    private final HttpClient httpClient;
+    private final RestTemplate restTemplate;
+    private final GameDtoToGameMapper gameDtoToGameMapper;
 
     @Autowired
-    public LichessClient(@Qualifier("lichessHttpClient") HttpClient httpClient) {
-        this.httpClient = httpClient;
+    public LichessClient(@Qualifier("lichessRestTemplate") RestTemplate restTemplate, GameDtoToGameMapper gameDtoToGameMapper) {
+        this.restTemplate = restTemplate;
+        this.gameDtoToGameMapper = gameDtoToGameMapper;
     }
 
-
-    public String getIdOfOngoingGame(User user) throws URISyntaxException, IOException, InterruptedException {
-        URI uri = new URI(LICHESS_BASE_URL + String.format(ONGOING_GAMES_ENDPOINT_TEMPLATE, user.getId()));
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(uri)
-                .header("accept", "application/json")
-                .build();
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        return response.body();
+    public Game getGame(String gameId) {
+        try {
+        URI uri = new URI(LICHESS_BASE_URL + String.format(EXPORT_ONE_GAME_ENDPOINT_TEMPLATE, gameId));
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("accept", "application/json");
+            RequestEntity<Void> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.GET,uri);
+            GameDto gameDto = restTemplate.exchange(requestEntity, GameDto.class).getBody();
+            return gameDtoToGameMapper.gameDtoToGame(gameDto);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Error when trying to get game: " + gameId, e);
+        }
     }
-
-//        private final ObjectMapper objectMapper;
-//
-//        private final HttpClient httpClient;
-//
-//        public LichessClient(ObjectMapper objectMapper, HttpClient httpClient) {
-//            this.objectMapper = objectMapper;
-//            this.httpClient = httpClient;
-//        }
-//
-//        public String getOngoingGames(String user) throws URISyntaxException, IOException {
-//            URI uri = new URIBuilder(LICHESS_URL + String.format(ONGOING_GAMES_ENDPOINT_TEMPLATE, user))
-//                    .addParameter("moves", "false")
-//                    .addParameter("clock", "false")
-//                    .build();
-//            HttpGet request = new HttpGet(uri);
-//            request.setHeader("accept", "application/json");
-//            String response = httpClient.execute(request, classicHttpResponse -> EntityUtils.toString(classicHttpResponse.getEntity()));
-//
-//            JsonNode responeJson = objectMapper.readTree(response);
-//            return responeJson.at("/id").asText();
-//        }
-//
-//        @Override
-//        public void perform(Move move) {
-//            try {
-//                String gameId = getOngoingGames("brunokrams");
-//                String moveString = move.toAlgebraicNotation();
-//                HttpPost request = new HttpPost(LICHESS_URL + String.format(MAKE_MOVE_ENDPOINT_TEMPLATE, gameId, moveString));
-//                request.setHeader("Authorization", "Bearer " + Credentials.LICHESS_API_KEY);
-//                request.setHeader("accept", "application/json");
-//
-//                String response = httpClient.execute(request, classicHttpResponse -> EntityUtils.toString(classicHttpResponse.getEntity()));
-//                System.out.println(response);
-//            } catch (URISyntaxException e) {
-//                throw new RuntimeException(e);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//        public void perform(String move) {
-//            try {
-//                String gameId = getOngoingGames("brunokrams");
-//                HttpPost request = new HttpPost(LICHESS_URL + String.format(MAKE_MOVE_ENDPOINT_TEMPLATE, gameId, move));
-//                request.setHeader("Authorization", "Bearer " + Credentials.LICHESS_API_KEY);
-//                request.setHeader("accept", "application/json");
-//
-//                String response = httpClient.execute(request, classicHttpResponse -> EntityUtils.toString(classicHttpResponse.getEntity()));
-//                System.out.println(response);
-//            } catch (URISyntaxException e) {
-//                throw new RuntimeException(e);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
 }

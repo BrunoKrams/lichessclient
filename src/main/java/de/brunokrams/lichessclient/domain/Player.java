@@ -1,18 +1,12 @@
 package de.brunokrams.lichessclient.domain;
 
-public class User {
+public class Player {
 
-    private final String id;
     private final String name;
 
 
-    public User(String id, String name) {
-        this.id = id;
+    public Player(String name) {
         this.name = name;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {
