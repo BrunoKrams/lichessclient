@@ -1,17 +1,16 @@
 package de.brunokrams.lichessclient.domain.lichessapi;
 
-import de.brunokrams.lichessclient.domain.Game;
 import de.brunokrams.lichessclient.domain.User;
-import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
-import java.util.List;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Component
 public class LichessClient {
@@ -27,14 +26,16 @@ public class LichessClient {
         this.httpClient = httpClient;
     }
 
-    public List<Game> getOngoingGamesByUser(User user) {
 
+    public String getIdOfOngoingGame(User user) throws URISyntaxException, IOException, InterruptedException {
+        URI uri = new URI(LICHESS_BASE_URL + String.format(ONGOING_GAMES_ENDPOINT_TEMPLATE, user.getId()));
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("accept", "application/json")
+                .build();
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        return response.body();
     }
-
-    public void makeMove(String san, Game game) {
-
-    }
-
 
 //        private final ObjectMapper objectMapper;
 //
