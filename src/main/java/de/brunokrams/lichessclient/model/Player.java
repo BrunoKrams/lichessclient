@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.domain;
+package de.brunokrams.lichessclient.model;
 
 public class Player {
 

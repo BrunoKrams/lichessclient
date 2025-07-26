@@ -1,7 +1,7 @@
-package de.brunokrams.lichessclient.domain.lichessapi;
+package de.brunokrams.lichessclient.model.lichess;
 
-import de.brunokrams.lichessclient.domain.Game;
-import de.brunokrams.lichessclient.domain.Player;
+import de.brunokrams.lichessclient.model.Game;
+import de.brunokrams.lichessclient.model.Player;
 import org.springframework.stereotype.Component;
 
 @Component

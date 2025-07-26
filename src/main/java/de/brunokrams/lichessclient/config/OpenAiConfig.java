@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient;
+package de.brunokrams.lichessclient.config;
 
 
 import org.springframework.ai.chat.messages.SystemMessage;

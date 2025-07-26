@@ -1,9 +1,9 @@
 package de.brunokrams.lichessclient.controller;
 
-import de.brunokrams.lichessclient.domain.recording.AudioRecorder;
-import de.brunokrams.lichessclient.domain.recording.Device;
-import de.brunokrams.lichessclient.domain.recording.DevicesManager;
-import de.brunokrams.lichessclient.domain.speechtosan.SpeechToSan;
+import de.brunokrams.lichessclient.model.recording.AudioRecorder;
+import de.brunokrams.lichessclient.model.recording.Device;
+import de.brunokrams.lichessclient.model.recording.DevicesManager;
+import de.brunokrams.lichessclient.model.speechtosan.SpeechToSan;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

@@ -5,7 +5,8 @@
     -fx-background-radius: 30; /* fully round for 60x60 */
     -fx-border-radius: 30;
 }
-
-
+.login-button {
+    -fx-font-size: 24px;
+}
 
 

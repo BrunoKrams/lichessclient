@@ -4,36 +4,38 @@ import de.brunokrams.lichessclient.App;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class SceneSwitcher {
 
-    private final Stage stage;
-    private final ApplicationContext applicationContext;
-    private final Scene main;
-    private final Scene web;
-    private final Scene login;
+    private Stage stage;
+    private Scene main;
+    private Scene login;
 
-    public SceneSwitcher(Stage stage, ApplicationContext applicationContext) throws IOException {
+    public void init(Stage stage, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
         this.stage = stage;
-        this.applicationContext = applicationContext;
-
-        this.main = createScene("view/main.fxml");
-        this.login = createScene("view/login.fxml");
-        this.web = createScene("view/web.fxml");
+        this.main = createScene("view/main.fxml", configurableApplicationContext);
+        this.login = createScene("view/login.fxml", configurableApplicationContext);
     }
 
-    private Scene createScene(String pathToView) throws IOException {
+    private Scene createScene(String pathToView, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(pathToView));
-        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        fxmlLoader.setControllerFactory(configurableApplicationContext::getBean);
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
         return scene;
     }
 
-    public void showLogin() {
+    public void displayLogin() {
         stage.setScene(login);
     }
+
+    public void displayMain() {
+        stage.setScene(main);
+    }
 }
+

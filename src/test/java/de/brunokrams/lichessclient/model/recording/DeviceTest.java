@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.domain.recording;
+package de.brunokrams.lichessclient.model.recording;
 
 import org.junit.jupiter.api.Test;
 

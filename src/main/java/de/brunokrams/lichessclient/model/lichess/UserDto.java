@@ -1,4 +1,4 @@
-package de.brunokrams.lichessclient.domain.lichessapi;
+package de.brunokrams.lichessclient.model.lichess;
 
 public class UserDto {
     private String name;

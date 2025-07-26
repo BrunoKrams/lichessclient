@@ -1,46 +1,53 @@
 package de.brunokrams.lichessclient;
 
+import de.brunokrams.lichessclient.model.lichess.LichessOAuthService;
 import de.brunokrams.lichessclient.view.SceneSwitcher;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
 
 public class App extends Application {
 
-    private static final Logger log = LoggerFactory.getLogger(App.class);
-    private AnnotationConfigApplicationContext springContext;
+    private ConfigurableApplicationContext configurableApplicationContext;
 
-    @Override
-    public void init() throws IOException {
-        springContext = new AnnotationConfigApplicationContext();
-        springContext.getEnvironment().getPropertySources().addLast(new ResourcePropertySource("classpath:application.properties"));
-        springContext.register(AppConfig.class);
-        springContext.refresh();
-    }
-
-
-    @Override
-    public void start(Stage stage) throws IOException {
-        SceneSwitcher sceneSwitcher = new SceneSwitcher(stage, springContext);
-        springContext.getBeanFactory().registerSingleton("sceneSwitcher", sceneSwitcher);
-        stage.setTitle("Lichess Client");
-        sceneSwitcher.showLogin();
-        stage.show();
-    }
-
-
-
-    @Override
-    public void stop() {
-        springContext.close();
+    public App() {
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
+    @Override
+    public void init() {
+        configurableApplicationContext = new SpringApplicationBuilder(AppConfig.class)
+                .web(WebApplicationType.SERVLET)
+                .initializers(applicationContext -> {
+                    applicationContext.getBeanFactory().registerSingleton("hostServices", getHostServices());
+                })
+                .run();
+    }
+
+    @Override
+    public void start(Stage stage) throws IOException {
+        SceneSwitcher sceneSwitcher = configurableApplicationContext.getBean("sceneSwitcher", SceneSwitcher.class);
+        sceneSwitcher.init(stage, configurableApplicationContext);
+        LichessOAuthService lichessOAuthService = configurableApplicationContext.getBean(LichessOAuthService.class);
+        if (lichessOAuthService.isAuthenticated()) {
+            sceneSwitcher.displayMain();
+        } else {
+            sceneSwitcher.displayLogin();
+        }
+        stage.show();
+    }
+
+    @Override
+    public void stop() {
+        configurableApplicationContext.close();
+    }
+
+
 }
