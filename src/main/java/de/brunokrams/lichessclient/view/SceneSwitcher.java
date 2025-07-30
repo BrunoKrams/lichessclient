@@ -20,12 +20,28 @@ public class SceneSwitcher {
         this.configurableApplicationContext = configurableApplicationContext;
     }
 
-    private Scene createSettingsScene() throws IOException {
-        return createScene("view/settings.fxml", configurableApplicationContext);
+    public void displayLogin() throws IOException {
+        stage.setScene(createLoginScene());
+    }
+
+    public void displaySettings() throws IOException {
+        stage.setScene(createSettingsScene());
+    }
+
+    public void displayRecording() throws IOException {
+        stage.setScene(createRecordingScene());
     }
 
     private Scene createLoginScene() throws IOException {
         return createScene("view/login.fxml", configurableApplicationContext);
+    }
+
+    private Scene createSettingsScene() throws IOException {
+        return createScene("view/settings.fxml", configurableApplicationContext);
+    }
+
+    private Scene createRecordingScene() throws IOException {
+        return createScene("view/recording.fxml", configurableApplicationContext);
     }
 
     private Scene createScene(String pathToView, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
@@ -35,14 +51,5 @@ public class SceneSwitcher {
         scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
         return scene;
     }
-
-    public void displayLogin() throws IOException {
-        stage.setScene(createLoginScene());
-    }
-
-    public void displaySettings() throws IOException {
-        stage.setScene(createSettingsScene());
-    }
-
 }
 

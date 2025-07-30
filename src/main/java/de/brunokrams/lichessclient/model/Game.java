@@ -1,5 +1,7 @@
 package de.brunokrams.lichessclient.model;
 
+import java.util.Objects;
+
 public class Game {
 
     private final String id;
@@ -34,5 +36,17 @@ public class Game {
 
     public String getSpeed() {
         return speed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return Objects.equals(id, game.id) && Objects.equals(white, game.white) && Objects.equals(black, game.black) && Objects.equals(variant, game.variant) && Objects.equals(speed, game.speed);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, white, black, variant, speed);
     }
 }

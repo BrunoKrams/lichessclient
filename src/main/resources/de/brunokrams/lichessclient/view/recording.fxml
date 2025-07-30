@@ -4,10 +4,11 @@
 
 <?import javafx.geometry.Insets?>
 
+<?import de.brunokrams.lichessclient.view.Led?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             stylesheets="@lichess-theme.css"
             styleClass="root"
-            fx:controller="de.brunokrams.lichessclient.controller.SettingsController">
+            fx:controller="de.brunokrams.lichessclient.controller.RecordingController">
     <top>
         <HBox alignment="CENTER_RIGHT" spacing="10" BorderPane.alignment="TOP_CENTER">
             <padding>
@@ -19,30 +20,23 @@
 
     <center>
         <VBox alignment="CENTER" spacing="10.0">
-            <HBox prefHeight="100.0" prefWidth="400.0" spacing="10.0"
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0" spacing="10.0"
                   VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
-                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                    <Label text="Devices"/>
-                    <ListView fx:id="devicesListView" VBox.vgrow="ALWAYS"/>
-                </VBox>
-                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                    <Label text="Games"/>
-                    <ListView fx:id="ongoingGamesListView" VBox.vgrow="ALWAYS"/>
-                </VBox>
+                <Led/>
             </HBox>
             <HBox alignment="CENTER">
                 <padding>
                     <Insets top="10" bottom="10"/>
                 </padding>
-                <Button fx:id="startButton"
-                              styleClass="default-button"
-                              text="Start"
-                              onAction="#start">
+                <Button styleClass="default-button"
+                        text="Cancel"
+                        onAction="#cancel">
                     <tooltip>
-                        <Tooltip text="Start"/>
+                        <Tooltip text="Cancel"/>
                     </tooltip>
                 </Button>
             </HBox>
+            <Label fx:id="statusLabel"/>
         </VBox>
     </center>
 </BorderPane>

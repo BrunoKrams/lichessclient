@@ -7,22 +7,19 @@ import de.brunokrams.lichessclient.model.recording.AudioRecorder;
 import de.brunokrams.lichessclient.model.recording.Device;
 import de.brunokrams.lichessclient.model.recording.DevicesManager;
 import de.brunokrams.lichessclient.model.speechtosan.SpeechToSan;
-import javafx.application.Platform;
+import de.brunokrams.lichessclient.view.SceneSwitcher;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 import static javafx.beans.binding.Bindings.isNotNull;
@@ -35,73 +32,51 @@ public class SettingsController {
     @FXML
     private ListView<Device> devicesListView;
     @FXML
-    private ToggleButton recordingButton;
-    @FXML
-    private Label statusLabel;
+    private Button startButton;
     @FXML
     private Label userLabel;
 
     private final DevicesManager devicesManager;
-    private final AudioRecorder audioRecorder;
-    private final SpeechToSan speechToSan;
 
     private final OngoingGamesScheduledService ongoingGamesScheduledService;
     private final DevicesScheduledService devicesScheduledService;
+    private final SceneSwitcher sceneSwitcher;
 
     private final LichessService lichessService;
-    private final LichessOAuthService lichessOAuthService;
-
-    private final BooleanProperty isRecording = new SimpleBooleanProperty(false);
 
     @Autowired
-    public SettingsController(DevicesManager devicesManager, AudioRecorder audioRecorder, SpeechToSan speechToSan, OngoingGamesScheduledService ongoingGamesScheduledService, DevicesScheduledService devicesScheduledService, LichessService lichessService, LichessOAuthService lichessOAuthService) {
+    public SettingsController(DevicesManager devicesManager, OngoingGamesScheduledService ongoingGamesScheduledService, DevicesScheduledService devicesScheduledService, LichessService lichessService, LichessOAuthService lichessOAuthService, SceneSwitcher sceneSwitcher) {
+        this.sceneSwitcher = sceneSwitcher;
+        assert lichessOAuthService.isAuthenticated();
         this.devicesManager = devicesManager;
-        this.audioRecorder = audioRecorder;
-        this.speechToSan = speechToSan;
         this.ongoingGamesScheduledService = ongoingGamesScheduledService;
         this.devicesScheduledService = devicesScheduledService;
         this.lichessService = lichessService;
-        this.lichessOAuthService = lichessOAuthService;
-        assert lichessOAuthService.isAuthenticated();
     }
 
     @FXML
     public void initialize() {
-        initAudioRecorder();
-        initRecordingButton();
+        initStartButton();
         initDevicesListView();
         initOngoingGamesListView();
         initUserLabel();
+    }
+
+    private void initStartButton() {
+        startButton.disableProperty().bind(
+                devicesListView.getSelectionModel().selectedItemProperty().isNull()
+                        .or(ongoingGamesListView.getSelectionModel().selectedItemProperty().isNull())
+        );
     }
 
     private void initUserLabel() {
         userLabel.setText("Logged in as user " + lichessService.getActivePlayer().getName());
     }
 
-    private void initAudioRecorder() {
-        audioRecorder.setRecordingStartedListener(() -> setStatusLabelText("Voice detected. Started recording."));
-        audioRecorder.setRecordingReadyListener(recording -> {
-            setStatusLabelText("Recording finished. Translating to SAN.");
-            String sanMove = speechToSan.speechToSan(recording);
-            setStatusLabelText(sanMove);
-        });
-    }
-
-    private void setStatusLabelText(String text) {
-        Platform.runLater(() -> statusLabel.setText(text));
-    }
-
-    private void initRecordingButton() {
-        recordingButton.disableProperty().bind(isNotNull(devicesListView.getSelectionModel().selectedItemProperty())
-                .and(isNotNull(ongoingGamesListView.getSelectionModel().selectedItemProperty())));
-        recordingButton.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
-            isRecording.setValue(isSelected);
-            if (isSelected) {
-                audioRecorder.start(0.3d, 1000, devicesManager.getActive());
-            } else {
-                audioRecorder.stop();
-            }
-        });
+    public void start(ActionEvent actionEvent) throws IOException {
+        devicesScheduledService.cancel();
+        ongoingGamesScheduledService.cancel();
+        sceneSwitcher.displayRecording();
     }
 
     private interface Displayer<T> {
@@ -144,8 +119,6 @@ public class SettingsController {
         });
         listView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection == null || !newSelection.equals(oldSelection)) {
-                audioRecorder.stop();
-                recordingButton.setSelected(false);
                 selectionCallback.selected(newSelection);
             }
         });
@@ -158,7 +131,6 @@ public class SettingsController {
                 listView.getSelectionModel().clearSelection();
             }
         });
-
-        service.start();
+        service.restart();
     }
 }
