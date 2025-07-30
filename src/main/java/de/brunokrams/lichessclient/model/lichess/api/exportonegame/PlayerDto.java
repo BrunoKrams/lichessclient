@@ -1,6 +1,6 @@
-package de.brunokrams.lichessclient.model.lichess;
+package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 
-public class PlayerDto {
+class PlayerDto {
     private UserDto user;
 
     public UserDto getUser() {

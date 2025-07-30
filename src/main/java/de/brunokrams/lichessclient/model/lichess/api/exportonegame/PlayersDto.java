@@ -1,6 +1,6 @@
-package de.brunokrams.lichessclient.model.lichess;
+package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 
-public class PlayersDto {
+class PlayersDto {
     private PlayerDto white;
     private PlayerDto black;
 

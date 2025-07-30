@@ -14,9 +14,6 @@ public class App extends Application {
 
     private ConfigurableApplicationContext configurableApplicationContext;
 
-    public App() {
-    }
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -37,7 +34,7 @@ public class App extends Application {
         sceneSwitcher.init(stage, configurableApplicationContext);
         LichessOAuthService lichessOAuthService = configurableApplicationContext.getBean(LichessOAuthService.class);
         if (lichessOAuthService.isAuthenticated()) {
-            sceneSwitcher.displayMain();
+            sceneSwitcher.displaySettings();
         } else {
             sceneSwitcher.displayLogin();
         }

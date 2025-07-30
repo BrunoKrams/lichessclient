@@ -13,13 +13,19 @@ import java.io.IOException;
 public class SceneSwitcher {
 
     private Stage stage;
-    private Scene main;
-    private Scene login;
+    private ConfigurableApplicationContext configurableApplicationContext;
 
     public void init(Stage stage, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
         this.stage = stage;
-        this.main = createScene("view/main.fxml", configurableApplicationContext);
-        this.login = createScene("view/login.fxml", configurableApplicationContext);
+        this.configurableApplicationContext = configurableApplicationContext;
+    }
+
+    private Scene createSettingsScene() throws IOException {
+        return createScene("view/settings.fxml", configurableApplicationContext);
+    }
+
+    private Scene createLoginScene() throws IOException {
+        return createScene("view/login.fxml", configurableApplicationContext);
     }
 
     private Scene createScene(String pathToView, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
@@ -30,12 +36,13 @@ public class SceneSwitcher {
         return scene;
     }
 
-    public void displayLogin() {
-        stage.setScene(login);
+    public void displayLogin() throws IOException {
+        stage.setScene(createLoginScene());
     }
 
-    public void displayMain() {
-        stage.setScene(main);
+    public void displaySettings() throws IOException {
+        stage.setScene(createSettingsScene());
     }
+
 }
 

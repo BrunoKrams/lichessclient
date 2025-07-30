@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@styles.css"
+            styleClass="root"
+            fx:controller="de.brunokrams.lichessclient.controller.SettingsController">
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="10" BorderPane.alignment="TOP_CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="userLabel"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="10.0">
+            <HBox prefHeight="100.0" prefWidth="400.0" spacing="10.0"
+                  VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <Label text="Devices"/>
+                    <ListView fx:id="devicesListView" VBox.vgrow="ALWAYS"/>
+                </VBox>
+                <VBox HBox.hgrow="ALWAYS" spacing="5.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <Label text="Games"/>
+                    <ListView fx:id="ongoingGamesListView" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </HBox>
+            <HBox alignment="CENTER">
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+                <ToggleButton fx:id="recordingButton"
+                              prefWidth="50"
+                              prefHeight="50"
+                              styleClass="recording-button"
+                              text="REC">
+                    <tooltip>
+                        <Tooltip text="Record"/>
+                    </tooltip>
+                </ToggleButton>
+            </HBox>
+
+            <Label fx:id="statusLabel"/>
+        </VBox>
+    </center>
+</BorderPane>
+
+
+

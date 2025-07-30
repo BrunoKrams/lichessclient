@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO add test
+import java.io.IOException;
+
 @Controller
 public class LoginController {
 
@@ -36,7 +37,13 @@ public class LoginController {
     public ModelAndView authenticationCode(@RequestParam("code") String authenticationCode) {
         oauthService.finishPKCEFlow(authenticationCode);
         progressIndicator.setVisible(false);
-        Platform.runLater(sceneSwitcher::displayMain);
+        Platform.runLater(() -> {
+            try {
+                sceneSwitcher.displaySettings();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("authresponse.html");
         return modelAndView;

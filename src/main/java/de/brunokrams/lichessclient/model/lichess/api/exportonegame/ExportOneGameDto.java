@@ -1,6 +1,6 @@
-package de.brunokrams.lichessclient.model.lichess;
+package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 
-public class GameDto {
+public class ExportOneGameDto {
 
     private String id;
     private String variant;

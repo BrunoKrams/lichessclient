@@ -1,6 +1,6 @@
-package de.brunokrams.lichessclient.model.lichess;
+package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 
-public class UserDto {
+class UserDto {
     private String name;
 
     public String getName() {
