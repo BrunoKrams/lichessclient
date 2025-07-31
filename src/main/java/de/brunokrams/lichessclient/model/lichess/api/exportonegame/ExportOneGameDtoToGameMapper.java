@@ -10,7 +10,7 @@ class ExportOneGameDtoToGameMapper {
     public Game gameDtoToGame(ExportOneGameDto exportOneGameDto) {
         Player white = new Player(exportOneGameDto.getPlayers().getWhite().getUser().getName());
         Player black = new Player(exportOneGameDto.getPlayers().getBlack().getUser().getName());
-        return new Game(exportOneGameDto.getId(), white, black, exportOneGameDto.getVariant(), exportOneGameDto.getSpeed());
+        return new Game(exportOneGameDto.getId(), white, black, exportOneGameDto.getVariant(), exportOneGameDto.getSpeed(), exportOneGameDto.getFen());
     }
 
 }

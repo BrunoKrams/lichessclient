@@ -1,5 +1,6 @@
-package de.brunokrams.lichessclient.model.speechtosan;
+package de.brunokrams.lichessclient.model.speechtouci;
 
+import com.github.bhlangonijr.chesslib.Board;
 import de.brunokrams.lichessclient.AppConfig;
 import de.brunokrams.lichessclient.model.recording.Recording;
 import javafx.application.HostServices;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ContextConfiguration(classes = AppConfig.class)
-class OpenAiSpeechToSanTest {
+class OpenAiSpeechToUciTest {
 
     @Value("${spring.ai.openai.api-key}")
     private String apiKey;
@@ -34,20 +35,25 @@ class OpenAiSpeechToSanTest {
     HostServices hostServices;
 
     @Autowired
-    private OpenAiSpeechToSan openAiSpeechToSan;
+    private OpenAiSpeechToUci openAiSpeechToUci;
 
     @Test
-    void speechToSan_worksAsExpected() throws IOException, URISyntaxException {
+    void speechToUci_worksAsExpected() throws IOException, URISyntaxException {
         // given
         assertThat(apiKey).withFailMessage("This test requires an open ai api key to be set.").isNotEqualTo("dummy");
-        URL resource = getClass().getClassLoader().getResource("Ka4.mp3");
+        URL resource = getClass().getClassLoader().getResource("springer_b1_c3.m4a");
         Path path = Paths.get(resource.toURI());
         Recording recording = new Recording(Files.readAllBytes(path));
 
-        // when
-        String result = openAiSpeechToSan.speechToSan(recording);
+        Board board = new Board();
+        board.loadFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
+        board.legalMoves().forEach(System.out::println);
+
+        String result = openAiSpeechToUci.speechToUci(recording, board.legalMoves());
+
+        System.out.println(result);
         // then
-        assertThat(result).isEqualTo("Ka4");
+        assertThat(result).isEqualTo("b1c3");
     }
 }

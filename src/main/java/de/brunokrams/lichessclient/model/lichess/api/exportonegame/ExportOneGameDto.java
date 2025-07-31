@@ -6,6 +6,7 @@ public class ExportOneGameDto {
     private String variant;
     private String speed;
     private PlayersDto players;
+    private String fen;
 
     public String getId() {
         return id;
@@ -37,5 +38,13 @@ public class ExportOneGameDto {
 
     public void setPlayers(PlayersDto players) {
         this.players = players;
+    }
+
+    public String getFen() {
+        return fen;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }

@@ -28,7 +28,9 @@ public class LichessService {
         session.setActiveGame(game);
     }
 
-    public Player getActivePlayer() {
+    public Game getActiveGame() {
+        return session.getActiveGame();    }
+  public Player getActivePlayer() {
         return session.getActivePlayer();
     }
 

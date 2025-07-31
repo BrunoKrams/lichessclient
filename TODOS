@@ -5,5 +5,6 @@ Make session persistent
 Init games view with horicontal bars if no game is selected
 Run Sonar and fix issues
 Add openid for openai
-Hierfür  "if ("ERROR".equals(san)) {" was besseres finden
+Hierfür  "if ("ERROR".equals(uci)) {" was besseres finden
 Add icon
+Don't refetch the entire game for every move

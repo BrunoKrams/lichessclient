@@ -32,7 +32,7 @@ public class LichessOAuthService {
     private final ServletWebServerApplicationContext servletWebServerApplicationContext;
 
     @Autowired
-    public LichessOAuthService(@Qualifier("lichessRestTemplate") RestTemplate restTemplate, ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext) {
+    public LichessOAuthService(ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext) {
         this.obtainAccessToken = obtainAccessToken;
         this.getMyProfile = getMyProfile;
         this.hostServices = hostServices;
@@ -78,6 +78,7 @@ public class LichessOAuthService {
                 .fromPath(AUTHORIZATION_ENDPOINT)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", LICHESS_CLIENT_ID)
+                .queryParam("scope", "board:play")
                 .queryParam("redirect_uri", redirectUri())
                 .queryParam("code_challenge", codeChallenge)
                 .queryParam("code_challenge_method", "S256")

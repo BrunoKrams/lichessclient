@@ -5,10 +5,8 @@ class GameDto {
     private String color;
     private OpponentDto opponent;
     private String speed;
+    private String fen;
     private VariantDto variant;
-
-    // Getters and Setters
-    // (You can use Lombok @Data if desired)
 
     public String getGameId() {
         return gameId;
@@ -48,5 +46,13 @@ class GameDto {
 
     public void setVariant(VariantDto variant) {
         this.variant = variant;
+    }
+
+    public String getFen() {
+        return fen;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }

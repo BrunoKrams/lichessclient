@@ -9,13 +9,15 @@ public class Game {
     private final Player black;
     private final String variant;
     private final String speed;
+    private final String fen;
 
-    public Game(String id, Player white, Player black, String variant, String speed) {
+    public Game(String id, Player white, Player black, String variant, String speed, String fen) {
         this.id = id;
         this.white = white;
         this.black = black;
         this.variant = variant;
         this.speed = speed;
+        this.fen = fen;
     }
 
     public String getId() {
@@ -38,6 +40,10 @@ public class Game {
         return speed;
     }
 
+    public String getFen() {
+        return fen;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -49,4 +55,5 @@ public class Game {
     public int hashCode() {
         return Objects.hash(id, white, black, variant, speed);
     }
+
 }

@@ -29,7 +29,7 @@ public class GetMyOngoingGamesDtoToGamesMapper {
             white = opponent;
             black = player;
         }
-        return new Game(gameDto.getGameId(), white, black, gameDto.getVariant().getName(), gameDto.getSpeed());
+        return new Game(gameDto.getGameId(), white, black, gameDto.getVariant().getName(), gameDto.getSpeed(), gameDto.getFen());
     }
 
 }

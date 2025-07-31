@@ -3,13 +3,9 @@ package de.brunokrams.lichessclient.controller;
 import de.brunokrams.lichessclient.model.Game;
 import de.brunokrams.lichessclient.model.lichess.LichessOAuthService;
 import de.brunokrams.lichessclient.model.lichess.LichessService;
-import de.brunokrams.lichessclient.model.recording.AudioRecorder;
 import de.brunokrams.lichessclient.model.recording.Device;
 import de.brunokrams.lichessclient.model.recording.DevicesManager;
-import de.brunokrams.lichessclient.model.speechtosan.SpeechToSan;
 import de.brunokrams.lichessclient.view.SceneSwitcher;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.ScheduledService;
@@ -21,8 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
-
-import static javafx.beans.binding.Bindings.isNotNull;
 
 @Component
 public class SettingsController {
@@ -47,7 +41,6 @@ public class SettingsController {
     @Autowired
     public SettingsController(DevicesManager devicesManager, OngoingGamesScheduledService ongoingGamesScheduledService, DevicesScheduledService devicesScheduledService, LichessService lichessService, LichessOAuthService lichessOAuthService, SceneSwitcher sceneSwitcher) {
         this.sceneSwitcher = sceneSwitcher;
-        assert lichessOAuthService.isAuthenticated();
         this.devicesManager = devicesManager;
         this.ongoingGamesScheduledService = ongoingGamesScheduledService;
         this.devicesScheduledService = devicesScheduledService;
