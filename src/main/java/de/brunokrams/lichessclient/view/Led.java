@@ -13,7 +13,7 @@ public class Led extends StackPane {
     private static final int RADIUS = 100;
 
     private final Circle ledCircle;
-    private final Color offColor = Color.DARKGRAY;
+    private static final Color offColor = Color.DARKGRAY;
     private final ObjectProperty<Color> onColor = new SimpleObjectProperty<>(Color.LIMEGREEN);
     private final PauseTransition pauseTransition;
 

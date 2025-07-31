@@ -48,11 +48,8 @@ class OpenAiSpeechToUciTest {
         Board board = new Board();
         board.loadFromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-        board.legalMoves().forEach(System.out::println);
-
         String result = openAiSpeechToUci.speechToUci(recording, board.legalMoves());
 
-        System.out.println(result);
         // then
         assertThat(result).isEqualTo("b1c3");
     }

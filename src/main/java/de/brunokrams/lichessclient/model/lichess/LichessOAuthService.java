@@ -2,19 +2,18 @@ package de.brunokrams.lichessclient.model.lichess;
 
 import de.brunokrams.lichessclient.model.Session;
 import de.brunokrams.lichessclient.model.lichess.api.getmyprofile.GetMyProfile;
-import de.brunokrams.lichessclient.model.lichess.api.getmyprofile.ObtainAccessToken;
+import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAccessToken;
 import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAccessTokenDto;
 import javafx.application.HostServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -40,7 +39,7 @@ public class LichessOAuthService {
         this.servletWebServerApplicationContext = servletWebServerApplicationContext;
     }
 
-    public void startPKCEFlow() throws Exception {
+    public void startPKCEFlow() throws NoSuchAlgorithmException {
         session.setCodeVerifier(generateCodeVerifier());
         session.setCodeChallenge(generateCodeChallenge(session.getCodeVerifier()));
         openLoginInBrowser(session.getCodeChallenge());
@@ -66,7 +65,7 @@ public class LichessOAuthService {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(code);
     }
 
-    private String generateCodeChallenge(String codeVerifier) throws Exception {
+    private String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
         byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(bytes);

@@ -1,8 +1,6 @@
 package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 
 import de.brunokrams.lichessclient.model.Game;
-import de.brunokrams.lichessclient.model.Session;
-import de.brunokrams.lichessclient.model.lichess.api.getmyongoinggames.GetMyOngoingGamesDtoToGamesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;

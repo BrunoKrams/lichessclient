@@ -22,9 +22,7 @@ public class App extends Application {
     public void init() {
         configurableApplicationContext = new SpringApplicationBuilder(AppConfig.class)
                 .web(WebApplicationType.SERVLET)
-                .initializers(applicationContext -> {
-                    applicationContext.getBeanFactory().registerSingleton("hostServices", getHostServices());
-                })
+                .initializers(applicationContext -> applicationContext.getBeanFactory().registerSingleton("hostServices", getHostServices()))
                 .run();
     }
 

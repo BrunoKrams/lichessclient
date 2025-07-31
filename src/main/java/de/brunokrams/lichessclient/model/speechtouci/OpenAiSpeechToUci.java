@@ -40,10 +40,8 @@ public class OpenAiSpeechToUci implements SpeechToUci {
     public String speechToUci(Recording recording, List<Move> legalMoves) {
         AudioTranscriptionPrompt audioTranscriptionPrompt = new AudioTranscriptionPrompt(new ByteArrayResource(recording.getData()), openAiAudioTranscriptionOptions);
         String moveAsText = openAiAudioTranscriptionModel.call(audioTranscriptionPrompt).getResult().getOutput();
-        System.out.println(moveAsText);
         UserMessage userMessage = UserMessage.builder().text(moveAsText + "Possible moves:" + legalMoves.stream().map(Move::toString).collect(Collectors.joining(" "))).media().build();
         Prompt prompt = Prompt.builder().messages(systemMessage, userMessage).chatOptions(openAiChatOptions).build();
-        System.out.println(userMessage);
         return openAiChatModel.call(prompt).getResult().getOutput().getText();
     }
 }

@@ -66,7 +66,7 @@ public class SettingsController {
         userLabel.setText("Logged in as user " + lichessService.getActivePlayer().getName());
     }
 
-    public void start(ActionEvent actionEvent) throws IOException {
+    public void start() throws IOException {
         devicesScheduledService.cancel();
         ongoingGamesScheduledService.cancel();
         sceneSwitcher.displayRecording();

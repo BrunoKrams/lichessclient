@@ -74,7 +74,7 @@ public class RecordingController {
         });
     }
 
-    public void cancel(ActionEvent actionEvent) throws IOException {
+    public void cancel() throws IOException {
         audioRecorder.stop();
         sceneSwitcher.displaySettings();
     }

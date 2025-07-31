@@ -43,12 +43,8 @@ public class AudioRecorder {
         void onRecordingStarted();
     }
 
-    public void start(double threshold, int silenceMillisBeforeStop, Device device) {
-        if (running.get()) return;
-        running.set(true);
-
-        Thread monitorThread = new Thread(() -> {
-
+    private Runnable microphonListeningRunnable(Device device, double threshold, int silenceMillisBeforeStop) {
+        return () -> {
             try {
                 targetDataLine = device.getTargetDataLine(dataLineInfo);
                 targetDataLine.open(audioFormat);
@@ -84,8 +80,13 @@ public class AudioRecorder {
                     targetDataLine.close();
                 }
             }
-        }, "AudioRecorderThread");
+        };
+    }
 
+    public void start(double threshold, int silenceMillisBeforeStop, Device device) {
+        if (running.get()) return;
+        running.set(true);
+        Thread monitorThread = new Thread(microphonListeningRunnable(device, threshold, silenceMillisBeforeStop), "AudioRecorderThread");
         monitorThread.setDaemon(true);
         monitorThread.start();
     }

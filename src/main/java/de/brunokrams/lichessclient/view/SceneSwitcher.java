@@ -15,7 +15,7 @@ public class SceneSwitcher {
     private Stage stage;
     private ConfigurableApplicationContext configurableApplicationContext;
 
-    public void init(Stage stage, ConfigurableApplicationContext configurableApplicationContext) throws IOException {
+    public void init(Stage stage, ConfigurableApplicationContext configurableApplicationContext) {
         this.stage = stage;
         this.configurableApplicationContext = configurableApplicationContext;
     }

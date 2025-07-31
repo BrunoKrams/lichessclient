@@ -2,8 +2,6 @@ package de.brunokrams.lichessclient.model.lichess.api.makeaboardmove;
 
 import de.brunokrams.lichessclient.model.Game;
 import de.brunokrams.lichessclient.model.Session;
-import de.brunokrams.lichessclient.model.lichess.api.exportonegame.ExportOneGameDto;
-import io.micrometer.core.ipc.http.HttpSender;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

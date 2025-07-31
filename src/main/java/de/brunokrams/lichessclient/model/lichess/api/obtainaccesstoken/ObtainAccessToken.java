@@ -1,7 +1,6 @@
-package de.brunokrams.lichessclient.model.lichess.api.getmyprofile;
+package de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken;
 
 import de.brunokrams.lichessclient.model.Session;
-import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAccessTokenDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;

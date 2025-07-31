@@ -11,9 +11,10 @@ public class LichessConfig {
     public static final String LICHESS_CLIENT_ID = "DE_BRUNOKRAMS_LICHESS_CLIENT";
 
     public static class OAuth {
-        public static final String AUTHORIZATION_ENDPOINT = LICHESS_BASE_URL + "/oauth/authorize";
 
-        public static final String TOKEN_ENDPOINT = LICHESS_BASE_URL + "/api/token";
+        private OAuth() {
+        }
+        public static final String AUTHORIZATION_ENDPOINT = LICHESS_BASE_URL + "/oauth/authorize";
         public static final String REDIRECT_ENDPOINT = "/lichess-authorization-code";
     }
 
