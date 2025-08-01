@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+
+<?import de.brunokrams.lichessclient.view.Led?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@lichess-theme.css"
+            styleClass="root"
+            fx:controller="de.brunokrams.lichessclient.controller.RecordingController">
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="10" BorderPane.alignment="TOP_CENTER">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="userLabel"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="10.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0" spacing="10.0"
+                  VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
+                <Led/>
+            </HBox>
+            <HBox alignment="CENTER">
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+                <Button styleClass="default-button"
+                        text="Cancel"
+                        onAction="#cancel">
+                    <tooltip>
+                        <Tooltip text="Cancel"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+            <Label fx:id="statusLabel"/>
+        </VBox>
+    </center>
+</BorderPane>
+
+

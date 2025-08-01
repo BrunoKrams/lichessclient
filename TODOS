@@ -1,4 +1,10 @@
 pom aufräumen und sortieren
     Versionen nach oben
     Deps sortieren nach Scope
-Field umbenennen zu Square
+Make session persistent
+Init games view with horicontal bars if no game is selected
+Run Sonar and fix issues
+Add openid for openai
+Hierfür  "if ("ERROR".equals(uci)) {" was besseres finden
+Add icon
+Don't refetch the entire game for every move

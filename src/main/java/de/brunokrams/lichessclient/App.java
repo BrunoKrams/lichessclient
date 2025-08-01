@@ -1,43 +1,48 @@
 package de.brunokrams.lichessclient;
 
+import de.brunokrams.lichessclient.model.lichess.LichessOAuthService;
+import de.brunokrams.lichessclient.view.SceneSwitcher;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.boot.WebApplicationType;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
 
 public class App extends Application {
 
-    private AnnotationConfigApplicationContext springContext;
+    private ConfigurableApplicationContext configurableApplicationContext;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
-    public void init() throws IOException {
-        springContext = new AnnotationConfigApplicationContext();
-        springContext.getEnvironment().getPropertySources().addLast(new ResourcePropertySource("classpath:application.properties"));
-        springContext.register(AppConfig.class);
-        springContext.refresh();
+    public void init() {
+        configurableApplicationContext = new SpringApplicationBuilder(AppConfig.class)
+                .web(WebApplicationType.SERVLET)
+                .initializers(applicationContext -> applicationContext.getBeanFactory().registerSingleton("hostServices", getHostServices()))
+                .run();
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/main.fxml"));
-        fxmlLoader.setControllerFactory(springContext::getBean);
-        Scene scene = new Scene(fxmlLoader.load(), 640, 480);
-        scene.getStylesheets().add("org/kordamp/bootstrapfx/bootstrapfx.css");
-        stage.setTitle("Lichess Client");
-        stage.setScene(scene);
+        SceneSwitcher sceneSwitcher = configurableApplicationContext.getBean("sceneSwitcher", SceneSwitcher.class);
+        sceneSwitcher.init(stage, configurableApplicationContext);
+        LichessOAuthService lichessOAuthService = configurableApplicationContext.getBean(LichessOAuthService.class);
+        if (lichessOAuthService.isAuthenticated()) {
+            sceneSwitcher.displaySettings();
+        } else {
+            sceneSwitcher.displayLogin();
+        }
         stage.show();
     }
 
     @Override
     public void stop() {
-        springContext.close();
+        configurableApplicationContext.close();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
 }
