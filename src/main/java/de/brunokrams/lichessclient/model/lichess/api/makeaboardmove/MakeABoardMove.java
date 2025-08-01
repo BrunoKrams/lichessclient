@@ -3,6 +3,7 @@ package de.brunokrams.lichessclient.model.lichess.api.makeaboardmove;
 import de.brunokrams.lichessclient.model.Game;
 import de.brunokrams.lichessclient.model.Session;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -13,10 +14,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static de.brunokrams.lichessclient.config.LichessConfig.LICHESS_BASE_URL;
-
 @Component
 public class MakeABoardMove {
+
+    @Value("${lichess.config.baseurl}")
+    private String lichessBaseUrl;
 
     private static final String MAKE_A_BOARD_MOVE_ENDPOINT_TEMPLATE = "/api/board/game/{gameId}/move/{move}";
 
@@ -30,7 +32,7 @@ public class MakeABoardMove {
 
     public boolean submit(Game game, String move) {
         URI uri = UriComponentsBuilder
-                .fromUriString(LICHESS_BASE_URL)
+                .fromUriString(lichessBaseUrl)
                 .path(MAKE_A_BOARD_MOVE_ENDPOINT_TEMPLATE)
                 .buildAndExpand(game.getId(), move)
                 .toUri();

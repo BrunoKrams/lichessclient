@@ -3,6 +3,7 @@ package de.brunokrams.lichessclient.model.lichess.api.exportonegame;
 import de.brunokrams.lichessclient.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -12,13 +13,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static de.brunokrams.lichessclient.config.LichessConfig.LICHESS_BASE_URL;
-
 @Component
 public class ExportOneGame {
 
-    private static final String EXPORT_ONE_GAME_ENDPOINT_TEMPLATE = "/game/export/{gameId}";
+    @Value("${lichess.config.baseurl}")
+    private String lichessBaseUrl;
 
+    private static final String EXPORT_ONE_GAME_ENDPOINT_TEMPLATE = "/game/export/{gameId}";
 
     private final RestTemplate restTemplate;
     private final ExportOneGameDtoToGameMapper exportOneGameDtoToGameMapper;
@@ -31,7 +32,7 @@ public class ExportOneGame {
 
     public Game submit(String gameId) {
         URI uri = UriComponentsBuilder
-                .fromUriString(LICHESS_BASE_URL)
+                .fromUriString(lichessBaseUrl)
                 .path(EXPORT_ONE_GAME_ENDPOINT_TEMPLATE)
                 .buildAndExpand(gameId)
                 .toUri();
