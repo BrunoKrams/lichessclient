@@ -1,5 +1,6 @@
 package de.brunokrams.lichessclient.model.recording;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.sound.sampled.*;
@@ -13,7 +14,16 @@ import java.util.logging.Logger;
 public class AudioRecorder {
 
     private static final Logger logger = Logger.getLogger(AudioRecorder.class.getName());
-    private static final int BUFFER_SIZE = 4096;
+
+    @Value("${audio.config.recorder.buffersize}")
+    private int bufferSize;
+
+    @Value("${audio.config.recorder.noisethreshold}")
+    private double noiseThreshold;
+
+    @Value("${audio.config.recorder.silencedurationbeforestop}")
+    private int silenceDurationBeforeStop;
+
 
     private final AudioFormat audioFormat;
     private final DataLine.Info dataLineInfo;
@@ -44,10 +54,10 @@ public class AudioRecorder {
     }
 
 
-    public void start(double threshold, int silenceMillisBeforeStop, Device device) {
+    public void start(Device device) {
         if (running.get()) return;
         running.set(true);
-        Thread monitorThread = new Thread(microphonListeningRunnable(device, threshold, silenceMillisBeforeStop), "AudioRecorderThread");
+        Thread monitorThread = new Thread(microphonListeningRunnable(device), "AudioRecorderThread");
         monitorThread.setDaemon(true);
         monitorThread.start();
     }
@@ -70,7 +80,7 @@ public class AudioRecorder {
         this.recordingStartedListener = listener;
     }
 
-    private Runnable microphonListeningRunnable(Device device, double threshold, int silenceMillisBeforeStop) {
+    private Runnable microphonListeningRunnable(Device device) {
         return () -> {
             try (
                     TargetDataLine line = device.getTargetDataLine(dataLineInfo);
@@ -80,21 +90,21 @@ public class AudioRecorder {
                 byteArrayOutputStream = baos;
                 line.open(audioFormat);
                 line.start();
-                byte[] buffer = new byte[BUFFER_SIZE];
+                byte[] buffer = new byte[bufferSize];
                 lastSoundTime = System.currentTimeMillis();
-                record(threshold, silenceMillisBeforeStop, line, buffer, baos);
+                doRecording(line, buffer, baos);
             } catch (Exception e) {
                 logger.warning("Failed to capture input on device " + device.getName() + ". Root cause: " + e.getMessage());
             }
         };
     }
 
-    private void record(double threshold, int silenceMillisBeforeStop, TargetDataLine line, byte[] buffer, ByteArrayOutputStream baos) {
+    private void doRecording(TargetDataLine line, byte[] buffer, ByteArrayOutputStream baos) {
         while (running.get()) {
             int bytesRead = line.read(buffer, 0, buffer.length);
             if (bytesRead > 0) {
                 double level = calculateSoundLevel(buffer, bytesRead);
-                if (level > threshold) {
+                if (level > noiseThreshold) {
                     if (!recording) {
                         startRecording();
                     }
@@ -102,7 +112,7 @@ public class AudioRecorder {
                     lastSoundTime = System.currentTimeMillis();
                 } else if (recording) {
                     long silenceDuration = System.currentTimeMillis() - lastSoundTime;
-                    if (silenceDuration > silenceMillisBeforeStop) {
+                    if (silenceDuration > silenceDurationBeforeStop) {
                         stopRecording();
                     }
                 }

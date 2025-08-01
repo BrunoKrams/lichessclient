@@ -6,6 +6,7 @@ import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAcc
 import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAccessTokenDto;
 import javafx.application.HostServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,11 +19,18 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
-import static de.brunokrams.lichessclient.config.LichessConfig.LICHESS_CLIENT_ID;
 import static de.brunokrams.lichessclient.config.LichessConfig.OAuth.*;
 
 @Service
 public class LichessOAuthService {
+
+    @Value("${lichess.config.baseurl}")
+    private String lichessBaseUrl;
+
+    @Value("${lichess.config.clientid}")
+    private String lichessClientId;
+
+    private static final String AUTHORIZATION_ENDPOINT = "/oauth/authorize";
 
     private final ObtainAccessToken obtainAccessToken;
     private final GetMyProfile getMyProfile;
@@ -74,9 +82,9 @@ public class LichessOAuthService {
 
     private void openLoginInBrowser(String codeChallenge) {
         URI uri = UriComponentsBuilder
-                .fromPath(AUTHORIZATION_ENDPOINT)
+                .fromPath(lichessBaseUrl + AUTHORIZATION_ENDPOINT)
                 .queryParam("response_type", "code")
-                .queryParam("client_id", LICHESS_CLIENT_ID)
+                .queryParam("client_id", lichessClientId)
                 .queryParam("scope", "board:play")
                 .queryParam("redirect_uri", redirectUri())
                 .queryParam("code_challenge", codeChallenge)

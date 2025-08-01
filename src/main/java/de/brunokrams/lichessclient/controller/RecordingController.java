@@ -53,7 +53,7 @@ public class RecordingController {
     @FXML
     public void initialize() {
         initUserLabel();
-        audioRecorder.start(0.3d, 1000, devicesManager.getActive());
+        audioRecorder.start(devicesManager.getActive());
         audioRecorder.setRecordingStartedListener(() -> displayStatusText("Voice detected. Started recording."));
         audioRecorder.setRecordingReadyListener(recording -> {
             displayStatusText("Recording ready. Transforming to uci.");
