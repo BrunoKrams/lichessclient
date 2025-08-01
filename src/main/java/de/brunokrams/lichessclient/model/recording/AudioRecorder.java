@@ -43,45 +43,6 @@ public class AudioRecorder {
         void onRecordingStarted();
     }
 
-    private Runnable microphonListeningRunnable(Device device, double threshold, int silenceMillisBeforeStop) {
-        return () -> {
-            try {
-                targetDataLine = device.getTargetDataLine(dataLineInfo);
-                targetDataLine.open(audioFormat);
-                targetDataLine.start();
-
-                byte[] buffer = new byte[BUFFER_SIZE];
-                byteArrayOutputStream = new ByteArrayOutputStream();
-                lastSoundTime = System.currentTimeMillis();
-
-                while (running.get()) {
-                    int bytesRead = targetDataLine.read(buffer, 0, buffer.length);
-                    if (bytesRead > 0) {
-                        double level = calculateSoundLevel(buffer, bytesRead);
-                        if (level > threshold) {
-                            if (!recording) {
-                                startRecording();
-                            }
-                            byteArrayOutputStream.write(buffer, 0, bytesRead);
-                            lastSoundTime = System.currentTimeMillis();
-                        } else if (recording) {
-                            long silenceDuration = System.currentTimeMillis() - lastSoundTime;
-                            if (silenceDuration > silenceMillisBeforeStop) {
-                                stopRecording();
-                            }
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                logger.warning("Failed to capture input on device " + device.getName() + ". Root cause: " + e.getMessage());
-            } finally {
-                if (targetDataLine != null) {
-                    targetDataLine.stop();
-                    targetDataLine.close();
-                }
-            }
-        };
-    }
 
     public void start(double threshold, int silenceMillisBeforeStop, Device device) {
         if (running.get()) return;
@@ -96,6 +57,56 @@ public class AudioRecorder {
         if (targetDataLine != null && targetDataLine.isOpen()) {
             targetDataLine.stop();
             targetDataLine.close();
+        }
+    }
+
+    public void setRecordingReadyListener(RecordingReadyListener listener) {
+        if (listener == null) throw new IllegalArgumentException("RecordingReadyListener must not be null.");
+        this.recordingReadyListener = listener;
+    }
+
+    public void setRecordingStartedListener(RecordingStartedListener listener) {
+        if (listener == null) throw new IllegalArgumentException("RecordingStartedListener must not be null.");
+        this.recordingStartedListener = listener;
+    }
+
+    private Runnable microphonListeningRunnable(Device device, double threshold, int silenceMillisBeforeStop) {
+        return () -> {
+            try (
+                    TargetDataLine line = device.getTargetDataLine(dataLineInfo);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream()
+            ) {
+                targetDataLine = line;
+                byteArrayOutputStream = baos;
+                line.open(audioFormat);
+                line.start();
+                byte[] buffer = new byte[BUFFER_SIZE];
+                lastSoundTime = System.currentTimeMillis();
+                record(threshold, silenceMillisBeforeStop, line, buffer, baos);
+            } catch (Exception e) {
+                logger.warning("Failed to capture input on device " + device.getName() + ". Root cause: " + e.getMessage());
+            }
+        };
+    }
+
+    private void record(double threshold, int silenceMillisBeforeStop, TargetDataLine line, byte[] buffer, ByteArrayOutputStream baos) {
+        while (running.get()) {
+            int bytesRead = line.read(buffer, 0, buffer.length);
+            if (bytesRead > 0) {
+                double level = calculateSoundLevel(buffer, bytesRead);
+                if (level > threshold) {
+                    if (!recording) {
+                        startRecording();
+                    }
+                    baos.write(buffer, 0, bytesRead);
+                    lastSoundTime = System.currentTimeMillis();
+                } else if (recording) {
+                    long silenceDuration = System.currentTimeMillis() - lastSoundTime;
+                    if (silenceDuration > silenceMillisBeforeStop) {
+                        stopRecording();
+                    }
+                }
+            }
         }
     }
 
@@ -137,13 +148,4 @@ public class AudioRecorder {
         return rms / 32768.0;
     }
 
-    public void setRecordingReadyListener(RecordingReadyListener listener) {
-        if (listener == null) throw new IllegalArgumentException("RecordingReadyListener must not be null.");
-        this.recordingReadyListener = listener;
-    }
-
-    public void setRecordingStartedListener(RecordingStartedListener listener) {
-        if (listener == null) throw new IllegalArgumentException("RecordingStartedListener must not be null.");
-        this.recordingStartedListener = listener;
-    }
 }
