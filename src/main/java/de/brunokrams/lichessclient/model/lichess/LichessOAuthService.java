@@ -1,5 +1,6 @@
 package de.brunokrams.lichessclient.model.lichess;
 
+import de.brunokrams.lichessclient.LichessClientException;
 import de.brunokrams.lichessclient.model.Session;
 import de.brunokrams.lichessclient.model.lichess.api.getmyprofile.GetMyProfile;
 import de.brunokrams.lichessclient.model.lichess.api.obtainaccesstoken.ObtainAccessToken;
@@ -37,17 +38,19 @@ public class LichessOAuthService {
     private final HostServices hostServices;
     private final Session session;
     private final ServletWebServerApplicationContext servletWebServerApplicationContext;
+    private final SecureRandom secureRandom;
 
     @Autowired
-    public LichessOAuthService(ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext) {
+    public LichessOAuthService(ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext, SecureRandom secureRandom) {
         this.obtainAccessToken = obtainAccessToken;
         this.getMyProfile = getMyProfile;
         this.hostServices = hostServices;
         this.session = session;
         this.servletWebServerApplicationContext = servletWebServerApplicationContext;
+        this.secureRandom = secureRandom;
     }
 
-    public void startPKCEFlow() throws NoSuchAlgorithmException {
+    public void startPKCEFlow() {
         session.setCodeVerifier(generateCodeVerifier());
         session.setCodeChallenge(generateCodeChallenge(session.getCodeVerifier()));
         openLoginInBrowser(session.getCodeChallenge());
@@ -69,15 +72,20 @@ public class LichessOAuthService {
 
     private String generateCodeVerifier() {
         byte[] code = new byte[32];
-        new SecureRandom().nextBytes(code);
+        secureRandom.nextBytes(code);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(code);
     }
 
-    private String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
-        byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] digest = md.digest(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+    private String generateCodeChallenge(String codeVerifier) {
+        try {
+            byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(bytes);
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new LichessClientException("An error occured during code challenge generation", e);
+        }
     }
 
     private void openLoginInBrowser(String codeChallenge) {

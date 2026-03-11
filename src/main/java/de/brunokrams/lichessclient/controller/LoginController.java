@@ -1,5 +1,6 @@
 package de.brunokrams.lichessclient.controller;
 
+import de.brunokrams.lichessclient.LichessClientException;
 import de.brunokrams.lichessclient.config.LichessConfig;
 import de.brunokrams.lichessclient.model.lichess.LichessOAuthService;
 import de.brunokrams.lichessclient.view.SceneSwitcher;
@@ -28,7 +29,7 @@ public class LoginController {
     }
 
     @FXML
-    public void login() throws Exception {
+    public void login() {
         progressIndicator.setVisible(true);
         oauthService.startPKCEFlow();
     }
@@ -41,7 +42,7 @@ public class LoginController {
             try {
                 sceneSwitcher.displaySettings();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new LichessClientException("An error occured when switching scenes.", e);
             }
         });
         ModelAndView modelAndView = new ModelAndView();

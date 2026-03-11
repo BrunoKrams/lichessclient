@@ -1,6 +1,5 @@
 package de.brunokrams.lichessclient.controller;
 
-import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.move.Move;
 import de.brunokrams.lichessclient.model.chess.ChessEngine;
 import de.brunokrams.lichessclient.model.lichess.LichessService;
@@ -11,7 +10,6 @@ import de.brunokrams.lichessclient.model.recording.DevicesManager;
 import de.brunokrams.lichessclient.model.speechtouci.SpeechToUci;
 import de.brunokrams.lichessclient.view.SceneSwitcher;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.springframework.beans.factory.annotation.Autowired;

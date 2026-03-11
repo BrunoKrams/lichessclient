@@ -35,8 +35,6 @@ public class ObtainAccessToken {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        System.out.println(lichessClientId);
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("code", authorizationCode);
         map.add("grant_type", "authorization_code");
