@@ -1,7 +1,5 @@
 package de.brunokrams.lichessclient.controller;
 
-import de.brunokrams.lichessclient.model.Game;
-import de.brunokrams.lichessclient.model.lichess.LichessService;
 import de.brunokrams.lichessclient.model.recording.Device;
 import de.brunokrams.lichessclient.model.recording.DevicesManager;
 import javafx.concurrent.ScheduledService;
