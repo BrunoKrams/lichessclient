@@ -37,14 +37,16 @@ public class LichessOAuthService {
     private final HostServices hostServices;
     private final Session session;
     private final ServletWebServerApplicationContext servletWebServerApplicationContext;
+    private final SecureRandom secureRandom;
 
     @Autowired
-    public LichessOAuthService(ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext) {
+    public LichessOAuthService(ObtainAccessToken obtainAccessToken, GetMyProfile getMyProfile, HostServices hostServices, Session session, ServletWebServerApplicationContext servletWebServerApplicationContext, SecureRandom secureRandom) {
         this.obtainAccessToken = obtainAccessToken;
         this.getMyProfile = getMyProfile;
         this.hostServices = hostServices;
         this.session = session;
         this.servletWebServerApplicationContext = servletWebServerApplicationContext;
+        this.secureRandom = secureRandom;
     }
 
     public void startPKCEFlow() throws NoSuchAlgorithmException {
@@ -69,7 +71,7 @@ public class LichessOAuthService {
 
     private String generateCodeVerifier() {
         byte[] code = new byte[32];
-        new SecureRandom().nextBytes(code);
+        secureRandom.nextBytes(code);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(code);
     }
 
