@@ -4,6 +4,7 @@ import com.github.bhlangonijr.chesslib.Board;
 import de.brunokrams.lichessclient.AppConfig;
 import de.brunokrams.lichessclient.model.recording.Recording;
 import javafx.application.HostServices;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ContextConfiguration(classes = AppConfig.class)
+@Disabled("This test consumes quota so run it only when needed")
 class OpenAiSpeechToUciTest {
 
     @Value("${spring.ai.openai.api-key}")
