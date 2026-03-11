@@ -7,5 +7,6 @@ Run Sonar and fix issues
 Add openid for openai (X Impossible, openai doesn't offer openid)
 Find something better thanb "if ("ERROR".equals(uci)) {"
 Add icon
+Implement led to signal voice input
 Don't refetch the entire game for every move
 Extract all config strings ints and the like into application.properties
