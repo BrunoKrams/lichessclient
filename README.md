@@ -1,5 +1,4 @@
 # Voice Control for lichess.org
-![Build Status](https://github.com/bhlangonijr/chesslib/actions/workflows/maven.yml/badge.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/mit)
 
 This is a project that allows you to control your chess games on lichess using voice commands.
